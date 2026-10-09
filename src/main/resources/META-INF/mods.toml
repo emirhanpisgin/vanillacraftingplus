@@ -7,7 +7,7 @@ license="MIT"
 modId="${id}"
 version="${version}"
 displayName="${name}"
-description="An example Minecraft mod."
+description="This mod/datapack enhances vanilla crafting by making them a lot faster."
 license="MIT"
 
 [[dependencies.${id}]]

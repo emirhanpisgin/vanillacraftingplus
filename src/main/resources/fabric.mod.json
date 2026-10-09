@@ -3,14 +3,14 @@
   "id": "${id}",
   "version": "${version}",
   "name": "${name}",
-  "description": "An example Minecraft mod.",
+  "description": "This mod/datapack enhances vanilla crafting by making them a lot faster.",
   "authors": [
     "kryparnold"
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/vanillacraftingplus",
-    "sources": "https://github.com/yourname/vanillacraftingplus",
-    "issues": "https://github.com/yourname/vanillacraftingplus/issues"
+    "sources": "https://github.com/kryparnold/vanilla-crafting-plus",
+    "issues": "https://github.com/kryparnold/vanilla-crafting-plus/issues"
   },
   "license": "MIT",
   "icon": "assets/vanillacraftingplus/icon.png",

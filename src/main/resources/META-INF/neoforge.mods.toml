@@ -6,7 +6,7 @@ license = "MIT"
 modId = "${id}"
 displayName = "${name}"
 version = "${version}"
-description = "An example Minecraft mod."
+description = "This mod/datapack enhances vanilla crafting by making them a lot faster."
 license = "MIT"
 logoFile = "assets/vanillacraftingplus/icon.png"
 
