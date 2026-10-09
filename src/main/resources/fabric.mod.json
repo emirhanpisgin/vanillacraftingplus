@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "An example Minecraft mod.",
+  "authors": [
+    "kryparnold"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/vanillacraftingplus",
+    "sources": "https://github.com/yourname/vanillacraftingplus",
+    "issues": "https://github.com/yourname/vanillacraftingplus/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/vanillacraftingplus/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.kryparnold.vanillacraftingplus.VanillaCraftingPlusFabric"
+    ],
+    "client": [
+      "com.kryparnold.vanillacraftingplus.VanillaCraftingPlusClient"
+    ]
+  },
+  "mixins": [
+    "vanillacraftingplus.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric-api-base": "*",
+    "${command_api}": "*",
+    "fabric-networking-api-v1": "*",
+    "fabric-resource-loader-v0": "*",
+    "minecraft": "${minecraft}",
+    "java": ">=${java}"
+  }
+}

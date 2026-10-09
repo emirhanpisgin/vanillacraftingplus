@@ -1,0 +1,29 @@
+# See https://stonecutter.kikugie.dev/wiki/config/properties#centralized-properties
+mod.id = "vanillacraftingplus"
+mod.name = "VanillaCrafting+"
+mod.group = "com.kryparnold"
+mod.version = "0.1.0"
+
+deps.fabric_loader = "0.19.3"
+loomx.loom_version = "1.17-SNAPSHOT"
+
+["26.1"]
+
+[forge."26.1"]
+mod.mc_compat = ">=26.1"
+deps.forge_loader = "62.0.9"
+deps.forge_fml = "62"
+pack_format = 34
+
+[neoforge."26.1"]
+mod.mc_compat = ">=26.1"
+deps.neo_loader = "26.1.0.19-beta"
+pack_format = 34
+
+["26.2"]
+
+[fabric."26.2"]
+mod.mc_compat = ">=26.2"
+deps.fabric_api = "0.156.0+26.2"
+deps.fabric_command_api = "fabric-command-api-v2"
+pack_format = 88

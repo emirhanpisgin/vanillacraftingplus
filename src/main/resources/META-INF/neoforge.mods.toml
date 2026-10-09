@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license = "MIT"
+
+[[mods]]
+modId = "${id}"
+displayName = "${name}"
+version = "${version}"
+description = "An example Minecraft mod."
+license = "MIT"
+logoFile = "assets/vanillacraftingplus/icon.png"
+
+[[dependencies.${id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "${id}.mixins.json"

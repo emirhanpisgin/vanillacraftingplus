@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.kryparnold.vanillacraftingplus.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "main.refmap.json",
+  "mixins": [],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
