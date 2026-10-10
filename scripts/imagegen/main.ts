@@ -5,13 +5,14 @@ import { decompressFrames, parseGIF } from "gifuct-js";
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-type Ingredient = { item?: string; tag?: string };
+type CanonIngredient = { item?: string; tag?: string } | CanonIngredient[] | string;
 
 type Recipe = {
     name: string;
     type: string;
     pattern?: string[];
-    key?: Record<string, Ingredient>;
+    key?: Record<string, CanonIngredient>;
+    ingredients?: CanonIngredient[];
     result?: { item: string; count?: number };
 };
 
@@ -105,6 +106,38 @@ const TAGS: Record<string, string[]> = {
         "minecraft:dark_oak_wood",
     ],
     "minecraft:bamboo_blocks": ["minecraft:bamboo_block", "minecraft:stripped_bamboo_block"],
+    "minecraft:coals": ["minecraft:coal", "minecraft:charcoal"],
+    "minecraft:wool": [
+        "minecraft:white_wool",
+        "minecraft:orange_wool",
+        "minecraft:magenta_wool",
+        "minecraft:light_blue_wool",
+        "minecraft:yellow_wool",
+        "minecraft:lime_wool",
+        "minecraft:pink_wool",
+        "minecraft:gray_wool",
+        "minecraft:light_gray_wool",
+        "minecraft:cyan_wool",
+        "minecraft:purple_wool",
+        "minecraft:blue_wool",
+        "minecraft:brown_wool",
+        "minecraft:green_wool",
+        "minecraft:red_wool",
+        "minecraft:black_wool",
+    ],
+    "minecraft:planks": [
+        "minecraft:oak_planks",
+        "minecraft:spruce_planks",
+        "minecraft:birch_planks",
+        "minecraft:jungle_planks",
+        "minecraft:acacia_planks",
+        "minecraft:dark_oak_planks",
+        "minecraft:mangrove_planks",
+        "minecraft:cherry_planks",
+        "minecraft:bamboo_planks",
+        "minecraft:crimson_planks",
+        "minecraft:warped_planks",
+    ],
     "minecraft:jungle_logs": [
         "minecraft:jungle_log",
         "minecraft:jungle_wood",
@@ -174,7 +207,7 @@ async function generateRecipeImage(recipe: Recipe): Promise<Canvas> {
         for (let x = 0; x < pattern[y].length; x++) {
             const key = pattern[y][x];
             if (key === " ") continue;
-            const ingredient = recipe.key?.[key]?.item;
+            const ingredient = (recipe.key?.[key] as { item?: string } | undefined)?.item;
             if (!ingredient) continue;
             const icon = await loadIcon(ingredient);
             gridContext.drawImage(icon, GRID_SIZE * x + GAP_SIZE * x, GRID_SIZE * y + GAP_SIZE * y);
@@ -230,42 +263,111 @@ function encodeGif(frames: Canvas[], path: string, delay = 1000): void {
     writeFileSync(path, gif.bytes());
 }
 
+function isTag(value: CanonIngredient): value is { tag: string } {
+    return !!value && typeof value === "object" && !Array.isArray(value) && "tag" in value;
+}
+
+function resolveIngredient(value: CanonIngredient): string | undefined {
+    if (typeof value === "string") return value;
+    if (Array.isArray(value)) return value.length > 0 ? resolveIngredient(value[0]) : undefined;
+    if (value.item) return value.item;
+    if (value.tag) {
+        const members = TAGS[value.tag];
+        return members && members.length > 0 ? members[0] : undefined;
+    }
+    return undefined;
+}
+
+// Both shaped and shapeless recipes are reduced to a 3-row pattern + per-char
+// slots, so the renderer stays the same. Shapeless ingredients fill left to
+// right, top to bottom.
+function gridFromRecipe(recipe: Recipe): { pattern: string[]; slots: Record<string, CanonIngredient> } | undefined {
+    if (recipe.type === "minecraft:crafting_shaped" && recipe.pattern && recipe.key) {
+        const pattern = [...recipe.pattern];
+        while (pattern.length < 3) pattern.unshift("   ");
+        return { pattern, slots: { ...recipe.key } };
+    }
+    if (recipe.type === "minecraft:crafting_shapeless" && recipe.ingredients) {
+        const chars = "abcdefghi";
+        const pattern: string[] = [];
+        const slots: Record<string, CanonIngredient> = {};
+        const rows = Math.ceil(recipe.ingredients.length / 3);
+        for (let row = 0; row < rows; row++) {
+            let line = "";
+            for (let col = 0; col < 3; col++) {
+                const index = row * 3 + col;
+                if (index < recipe.ingredients.length) {
+                    const char = chars[index];
+                    line += char;
+                    slots[char] = recipe.ingredients[index];
+                } else {
+                    line += " ";
+                }
+            }
+            pattern.push(line);
+        }
+        return { pattern, slots };
+    }
+    return undefined;
+}
+
 async function generateImages(): Promise<void> {
     const recipes = getRecipes();
 
     for (const recipe of recipes) {
-        if (recipe.type !== "minecraft:crafting_shaped" || !recipe.key) continue;
+        const grid = gridFromRecipe(recipe);
+        if (!grid) continue;
 
-        let tag: string | undefined;
-        let tagKey: string | undefined;
-        const plainKeys: Record<string, Ingredient> = {};
-
-        for (const [key, value] of Object.entries(recipe.key)) {
-            if (value.item) plainKeys[key] = { item: value.item };
-            if (value.tag) {
-                tag = value.tag;
-                tagKey = key;
+        // Animate the first tag ingredient; other tags/lists resolve to their
+        // first entry so every frame stays a complete, valid grid.
+        let animTag: string | undefined;
+        let animKey: string | undefined;
+        for (const [key, value] of Object.entries(grid.slots)) {
+            if (isTag(value)) {
+                animTag = value.tag;
+                animKey = key;
+                break;
             }
         }
 
-        if (!tag) {
-            const image = await generateRecipeImage(recipe);
+        const buildKey = (overrides: Record<string, string>): Record<string, { item: string }> | undefined => {
+            const result: Record<string, { item: string }> = {};
+            for (const [key, value] of Object.entries(grid.slots)) {
+                const item = overrides[key] ?? resolveIngredient(value);
+                if (!item) return undefined;
+                result[key] = { item };
+            }
+            return result;
+        };
+
+        if (!animTag || !animKey) {
+            const key = buildKey({});
+            if (!key) {
+                console.warn(`  ${recipe.name}: unresolved ingredient; skipping`);
+                continue;
+            }
+            const image = await generateRecipeImage({ ...recipe, pattern: grid.pattern, key });
             writeFileSync(join(OUTPUT_DIR, `${recipe.name}.png`), await image.encode("png"));
             continue;
         }
 
-        const frames: Canvas[] = [];
-        for (const icon of TAGS[tag] ?? []) {
-            frames.push(
-                await generateRecipeImage({
-                    ...recipe,
-                    key: { ...plainKeys, [tagKey as string]: { item: icon } },
-                }),
-            );
+        const members = TAGS[animTag] ?? [];
+        if (members.length === 0) {
+            console.warn(`  ${recipe.name}: no TAGS entry for ${animTag}; skipping`);
+            continue;
         }
 
-        if (frames.length > 0) {
+        const frames: Canvas[] = [];
+        for (const icon of members) {
+            const key = buildKey({ [animKey]: icon });
+            if (!key) break;
+            frames.push(await generateRecipeImage({ ...recipe, pattern: grid.pattern, key }));
+        }
+
+        if (frames.length === members.length) {
             encodeGif(frames, join(OUTPUT_DIR, `${recipe.name}.gif`));
+        } else {
+            console.warn(`  ${recipe.name}: could not build all frames; skipping`);
         }
     }
 }
@@ -332,6 +434,12 @@ const COMBININGS: Record<string, string[]> = {
     bone_block: ["bone_block_from_bone.png", "bone_block_from_more_bone.png"],
     chest: ["chests.gif", "chests_for_crimson_stems.gif", "chests_for_warped_stems.gif", "chests_for_bamboo_blocks.gif"],
     stick: ["sticks.gif", "sticks_for_crimson_stems.gif", "sticks_for_warped_stems.gif", "sticks_for_bamboo_blocks.gif"],
+    workstations: [
+        "cartography_tables_from_logs_and_sugar_cane.gif",
+        "smithing_tables_from_logs.gif",
+        "fletching_tables_from_logs.gif",
+        "looms_from_logs.gif",
+    ],
 };
 
 async function loadFrames(file: string): Promise<Canvas[]> {
