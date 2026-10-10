@@ -39,5 +39,8 @@ local.properties
 # Local development notes (not published)
 DEVELOPMENT.md
 
+# Secrets
+.modrinth-token
+
 # JS tooling (scripts/imagegen)
 node_modules/
