@@ -36,5 +36,8 @@ bin/
 local.properties
 *.log
 
+# Local development notes (not published)
+DEVELOPMENT.md
+
 # JS tooling (scripts/imagegen)
 node_modules/
