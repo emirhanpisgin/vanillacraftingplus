@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "group": "sticks",
+    "key": {
+        "#": {
+            "tag": "minecraft:crimson_stems"
+        }
+    },
+    "pattern": [
+        "#", 
+        "#"
+    ],
+    "result": {
+        "count": 16,
+        "item": "minecraft:stick"
+    }
+}

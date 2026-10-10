@@ -3,6 +3,11 @@ import org.gradle.api.tasks.compile.JavaCompile
 plugins {
     // This plugin applies the correct loom variant based on the Minecraft version
     id("dev.kikugie.loom-back-compat")
+    id("vcp-recipes")
+}
+
+recipeData {
+    mcVersion.set(sc.current.version)
 }
 
 // DO NOT set group = ...!
@@ -31,9 +36,15 @@ dependencies {
 
     // Use `mod{dependency type}` even on 26.1+ - loom-back-compat converts them
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
-    fapi("fabric-networking-api-v1", "fabric-resource-loader-v0")
-    if (sc.current.parsed >= "1.19") fapi("fabric-command-api-v2")
-    else fapi("fabric-command-api-v1")
+    if (sc.current.parsed >= "1.17") {
+        // Only the resource loader is needed: it is what exposes the mod's data/
+        // (recipes) and assets/ (icon) to the game.
+        fapi("fabric-resource-loader-v0")
+    } else {
+        // Fabric API was a single artifact before the module split (1.17).
+        val fabricApiVersion: String = sc.properties["deps.fabric_api"]
+        modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
+    }
 }
 
 loom {
@@ -69,12 +80,21 @@ tasks {
             register("name", "mod.name")
             register("version", "mod.version")
             register("minecraft", "mod.mc_compat")
-            register("command_api", "deps.fabric_command_api")
-            register("pack_format", "pack_format")
+            register("pack_fields", "pack_fields")
             set("java", requiredJava.majorVersion)
         }
 
-        filesMatching("fabric.mod.json") { expand(props) }
+        // The dependency list differs per era (umbrella `fabric` before the
+        // module split, individual modules from 1.17). The raw file keeps a
+        // valid placeholder key so Loom can parse it for interface injection;
+        // it is replaced with the node's fragment during processing.
+        val apiDeps: String = sc.properties["fabric_api_deps"]
+        inputs.property("fabric_api_deps", apiDeps)
+
+        filesMatching("fabric.mod.json") {
+            expand(props)
+            filter { line: String -> if (line.contains("\"fabric-api-deps\"")) "    $apiDeps" else line }
+        }
         filesMatching("pack.mcmeta") { expand(props) }
 
         exclude("META-INF/mods.toml", "META-INF/neoforge.mods.toml")

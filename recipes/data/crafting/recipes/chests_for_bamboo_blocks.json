@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "group": "chest",
+    "key": {
+        "#": {
+            "tag": "minecraft:bamboo_blocks"
+        }
+    },
+    "pattern": [
+        "###", 
+        "# #",
+        "###"
+    ],
+    "result": {
+        "count": 2,
+        "item": "minecraft:chest"
+    }
+}

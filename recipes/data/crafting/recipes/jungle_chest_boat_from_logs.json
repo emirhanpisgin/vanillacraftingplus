@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " L ",
+        "#L#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:jungle_planks"
+        },
+        "L": {
+            "tag": "minecraft:jungle_logs"
+        }
+    },
+    "result": {
+        "item": "minecraft:jungle_chest_boat"
+    },
+    "group": "chest_boat",
+    "category": "misc"
+}

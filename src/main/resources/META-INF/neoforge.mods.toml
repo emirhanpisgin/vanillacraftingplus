@@ -16,6 +16,3 @@ type = "required"
 versionRange = "${minecraft}"
 ordering = "NONE"
 side = "BOTH"
-
-[[mixins]]
-config = "${id}.mixins.json"

@@ -6,6 +6,11 @@ plugins {
     id("net.minecraftforge.gradle") version "7.0.40"
     id("net.minecraftforge.renamer") version "1.1.2"
     id("forge-mutex")
+    id("vcp-recipes")
+}
+
+recipeData {
+    mcVersion.set(sc.current.version)
 }
 
 version = "${property("mod.version")}+${sc.current.version}"
@@ -68,10 +73,6 @@ minecraft {
     runs {
         configureEach {
             workingDir.convention(rootProject.layout.projectDirectory.dir("run"))
-            // Forge does not read [[mixins]] from mods.toml; mixin configs are
-            // registered via the MixinConfigs manifest attribute (production)
-            // and the --mixin.config argument (dev runs).
-            args("--mixin.config=$modId.mixins.json")
             // The Slime launcher reflectively invokes BootstrapLauncher.main;
             // JDK 17+ module access requires this opening.
             jvmArgs("--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED")
@@ -189,14 +190,6 @@ if (sc.current.parsed >= "1.20.4") {
     }
 }
 
-// Production mixin registration: Forge registers mixin configs from the
-// MixinConfigs attribute of the mod jar's manifest.
-tasks.named<Jar>("jar") {
-    manifest {
-        attributes("MixinConfigs" to "$modId.mixins.json")
-    }
-}
-
 // Compile with the current JDK but target the Java version each Minecraft version requires.
 tasks.withType<JavaCompile>().configureEach {
     options.release.set(requiredJava.majorVersion.toInt())
@@ -223,7 +216,7 @@ tasks {
             register("version", "mod.version")
             register("minecraft", "mod.mc_compat")
             register("fml", "deps.forge_fml")
-            register("pack_format", "pack_format")
+            register("pack_fields", "pack_fields")
         }
 
         filesMatching("META-INF/mods.toml") { expand(props) }

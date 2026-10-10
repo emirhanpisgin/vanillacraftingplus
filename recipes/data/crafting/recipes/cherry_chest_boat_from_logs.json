@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " L ",
+        "#L#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:cherry_planks"
+        },
+        "L": {
+            "tag": "minecraft:cherry_logs"
+        }
+    },
+    "result": {
+        "item": "minecraft:cherry_chest_boat"
+    },
+    "group": "chest_boat",
+    "category": "misc"
+}

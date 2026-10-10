@@ -23,15 +23,9 @@
       "com.kryparnold.vanillacraftingplus.VanillaCraftingPlusClient"
     ]
   },
-  "mixins": [
-    "vanillacraftingplus.mixins.json"
-  ],
   "depends": {
     "fabricloader": ">=0.14",
-    "fabric-api-base": "*",
-    "${command_api}": "*",
-    "fabric-networking-api-v1": "*",
-    "fabric-resource-loader-v0": "*",
+    "fabric-api-deps": "*",
     "minecraft": "${minecraft}",
     "java": ">=${java}"
   }

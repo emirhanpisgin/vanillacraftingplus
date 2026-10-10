@@ -4,6 +4,11 @@ plugins {
     id("java")
     id("net.neoforged.moddev") version "2.0.147"
     id("neoforge-mutex")
+    id("vcp-recipes")
+}
+
+recipeData {
+    mcVersion.set(sc.current.version)
 }
 
 version = "${property("mod.version")}+${sc.current.version}"
@@ -66,7 +71,7 @@ tasks {
             register("name", "mod.name")
             register("version", "mod.version")
             register("minecraft", "mod.mc_compat")
-            register("pack_format", "pack_format")
+            register("pack_fields", "pack_fields")
         }
 
         // NeoForge 20.4 (FML 2.x) still reads META-INF/mods.toml; the rename to

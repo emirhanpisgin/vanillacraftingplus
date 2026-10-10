@@ -49,7 +49,25 @@ stonecutter {
         match("26.1", "forge")
         match("26.1", "neoforge")
 
-        vcsVersion = "26.2-fabric"
+        // Sweep floor nodes (AGENTS.md section 10). Temporary nodes are added and
+        // removed one version at a time while walking upward from these floors.
+        match("1.16.5", "fabric")
+        match("1.16.5", "forge")
+        match("1.20.4", "neoforge")
+
+        // Forge runtime-name boundary: <1.20.6 ships SRG-remapped jars, >=1.20.6
+        // runs official names (no Forge 1.20.5 exists). One jar cannot cover both.
+        match("1.20.6", "forge")
+
+        // NeoForge metadata boundary: 20.4 reads META-INF/mods.toml (FML 2.x),
+        // >=20.5 expects neoforge.mods.toml and rejects the old jar.
+        match("1.20.6", "neoforge")
+
+        // Fabric API umbrella-id boundary: <=1.18.1's latest API is the monolithic
+        // `fabric` mod, 1.18.2's is the modular `fabric-api`.
+        match("1.18.2", "fabric")
+
+
     }
 }
 

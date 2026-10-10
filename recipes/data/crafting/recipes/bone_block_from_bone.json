@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "building",
+    "group": "bone_block",
+    "key": {
+        "#": {
+            "item": "minecraft:bone"
+        }
+    },
+    "pattern": [
+        "###"
+    ],
+    "result": {
+        "item": "minecraft:bone_block"
+    }
+}

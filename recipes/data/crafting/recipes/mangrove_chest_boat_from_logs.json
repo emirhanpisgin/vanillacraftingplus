@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " L ",
+        "#L#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:mangrove_planks"
+        },
+        "L": {
+            "tag": "minecraft:mangrove_logs"
+        }
+    },
+    "result": {
+        "item": "minecraft:mangrove_chest_boat"
+    },
+    "group": "chest_boat",
+    "category": "misc"
+}

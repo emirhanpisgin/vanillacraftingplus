@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "redstone",
+    "group": "hopper",
+    "key": {
+        "L": {
+            "tag": "minecraft:logs"
+        },
+        "I": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "pattern": [
+        "ILI", 
+        "ILI", 
+        " I "
+    ],
+    "result": {
+        "item": "minecraft:hopper"
+    }
+}

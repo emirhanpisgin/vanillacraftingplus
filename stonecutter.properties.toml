@@ -2,28 +2,74 @@
 mod.id = "vanillacraftingplus"
 mod.name = "VanillaCrafting+"
 mod.group = "com.kryparnold"
-mod.version = "0.1.0"
+mod.version = "1.0.2"
 
 deps.fabric_loader = "0.19.3"
 loomx.loom_version = "1.17-SNAPSHOT"
-
-["26.1"]
-
 [forge."26.1"]
 mod.mc_compat = ">=26.1"
 deps.forge_loader = "62.0.9"
 deps.forge_fml = "62"
-pack_format = 34
-
+pack_fields = "\"min_format\": 84, \"max_format\": 84"
+data_pack_format = "101.1"
 [neoforge."26.1"]
 mod.mc_compat = ">=26.1"
 deps.neo_loader = "26.1.0.19-beta"
-pack_format = 34
-
-["26.2"]
-
+pack_fields = "\"min_format\": 84, \"max_format\": 84"
+data_pack_format = "101.1"
 [fabric."26.2"]
 mod.mc_compat = ">=26.2"
 deps.fabric_api = "0.156.0+26.2"
-deps.fabric_command_api = "fabric-command-api-v2"
-pack_format = 88
+fabric_api_deps = "\"fabric-resource-loader-v0\": \"*\","
+pack_fields = "\"min_format\": 88, \"max_format\": 88"
+data_pack_format = "107.1"
+# Sweep floor nodes (AGENTS.md section 10).
+
+[fabric."1.16.5"]
+mod.mc_compat = ">=1.16.5 <1.18.2"
+deps.fabric_api = "0.42.0+1.16"
+fabric_api_deps = "\"fabric\": \"*\","
+pack_fields = "\"pack_format\": 6"
+data_pack_format = "6"
+[forge."1.16.5"]
+mod.mc_compat = ">=1.16.5 <1.20.6"
+deps.forge_loader = "36.2.42"
+deps.forge_fml = "36"
+pack_fields = "\"pack_format\": 6"
+data_pack_format = "6"
+[neoforge."1.20.4"]
+mod.mc_compat = ">=1.20.4 <1.20.6"
+deps.neo_loader = "20.4.251"
+pack_fields = "\"pack_format\": 22"
+data_pack_format = "26"
+
+# Forge runtime-name boundary: official names from 1.20.6 (no 1.20.5 build).
+
+["1.20.6"]
+
+[forge."1.20.6"]
+mod.mc_compat = ">=1.20.6 <26.1"
+deps.forge_loader = "50.2.10"
+deps.forge_fml = "50"
+pack_fields = "\"pack_format\": 32"
+data_pack_format = "41"
+
+# NeoForge metadata boundary: neoforge.mods.toml from 20.5/1.20.6.
+
+[neoforge."1.20.6"]
+mod.mc_compat = ">=1.20.6 <26.1"
+deps.neo_loader = "20.6.141"
+pack_fields = "\"pack_format\": 32"
+data_pack_format = "41"
+
+# Fabric API umbrella-id boundary: modular `fabric-api` from 1.18.2.
+
+["1.18.2"]
+
+[fabric."1.18.2"]
+mod.mc_compat = ">=1.18.2 <26.2"
+deps.fabric_api = "0.77.0+1.18.2"
+fabric_api_deps = "\"fabric-resource-loader-v0\": \"*\","
+pack_fields = "\"pack_format\": 8"
+data_pack_format = "9"
+

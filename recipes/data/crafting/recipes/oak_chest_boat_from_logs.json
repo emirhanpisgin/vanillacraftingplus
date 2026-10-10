@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " L ",
+        "#L#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:oak_planks"
+        },
+        "L": {
+            "tag": "minecraft:oak_logs"
+        }
+    },
+    "result": {
+        "item": "minecraft:oak_chest_boat"
+    },
+    "group": "chest_boat",
+    "category": "misc"
+}
