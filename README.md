@@ -34,6 +34,30 @@ Ships as a mod for **Fabric, Forge and NeoForge**, and as a standalone **datapac
 ### Glowstone Dust and Redstone To Redstone Lamp
 ![Glowstone Dust and Redstone To Redstone Lamp](https://cdn.modrinth.com/data/DfbZLvZG/images/8b36849f4afeb882a5b7d58e8bfda36fd5ca5487.png)
 
+### Logs To Torches
+![Logs To Torches](https://cdn.modrinth.com/data/DfbZLvZG/images/00e962cd828578a8a95e7202d0c5e6f32d9cc21e.gif)
+
+### Logs To Ladders
+![Logs To Ladders](https://cdn.modrinth.com/data/DfbZLvZG/images/a17936d8ded1b71faf45fa167b087f6ff3ea0c24.gif)
+
+### Sugar Cane To Books
+![Sugar Cane To Books](https://cdn.modrinth.com/data/DfbZLvZG/images/0fe029431a5b2fb8e585e52e4af2dcac067b046c.png)
+
+### Logs To Bookshelves
+![Logs To Bookshelves](https://cdn.modrinth.com/data/DfbZLvZG/images/7905a4caf3bfe2c2e60e2cdc47644c855a887b6a.gif)
+
+### Logs To Barrels
+![Logs To Barrels](https://cdn.modrinth.com/data/DfbZLvZG/images/2bb1349c46f6765883261a7220615b59d490a753.gif)
+
+### Logs To Armor Stands
+![Logs To Armor Stands](https://cdn.modrinth.com/data/DfbZLvZG/images/7beac823dc12e6e24e10eef21eee9b5afba0c954.gif)
+
+### Iron Blocks To Iron Bars
+![Iron Blocks To Iron Bars](https://cdn.modrinth.com/data/DfbZLvZG/images/f85a46e8f465fe17c13219cd2c1972a0640bf63a.png)
+
+### Logs To Workstations
+![Logs To Workstations](https://cdn.modrinth.com/data/DfbZLvZG/images/193f4180f766f4809e42fb82d12c19e7e90d1316.gif)
+
 ## License
 
 MIT, see [LICENSE](LICENSE).
