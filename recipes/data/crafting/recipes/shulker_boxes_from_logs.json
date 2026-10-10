@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "item": "minecraft:shulker_shell"
+        },
+        {
+            "item": "minecraft:shulker_shell"
+        }
+    ],
+    "result": {
+        "item": "minecraft:shulker_box",
+        "count": 1
+    },
+    "group": "shulker_box",
+    "category": "misc"
+}

@@ -1,0 +1,38 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "tag": "minecraft:coals"
+        },
+        {
+            "tag": "minecraft:coals"
+        },
+        {
+            "tag": "minecraft:coals"
+        },
+        {
+            "tag": "minecraft:coals"
+        },
+        {
+            "tag": "minecraft:coals"
+        },
+        {
+            "tag": "minecraft:coals"
+        },
+        {
+            "tag": "minecraft:coals"
+        },
+        {
+            "tag": "minecraft:coals"
+        }
+    ],
+    "result": {
+        "item": "minecraft:torch",
+        "count": 32
+    },
+    "group": "torch",
+    "category": "misc"
+}

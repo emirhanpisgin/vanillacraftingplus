@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "tag": "minecraft:wool"
+        }
+    ],
+    "result": {
+        "item": "minecraft:painting",
+        "count": 1
+    },
+    "group": "painting",
+    "category": "misc"
+}

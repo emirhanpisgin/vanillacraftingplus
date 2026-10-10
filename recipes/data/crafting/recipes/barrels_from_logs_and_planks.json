@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "tag": "minecraft:logs"
+        },
+        {
+            "tag": "minecraft:planks"
+        }
+    ],
+    "result": {
+        "item": "minecraft:barrel",
+        "count": 3
+    },
+    "group": "barrel",
+    "category": "misc"
+}
