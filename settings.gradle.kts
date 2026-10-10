@@ -67,7 +67,6 @@ stonecutter {
         // `fabric` mod, 1.18.2's is the modular `fabric-api`.
         match("1.18.2", "fabric")
 
-
     }
 }
 

@@ -1,6 +1,6 @@
 param(
     [string]$Token = $env:MODRINTH_TOKEN,
-    [string]$Version = "1.0.2",
+    [string]$Version = "1.1.0",
     [ValidateSet("fabric", "forge", "neoforge", "datapack")]
     [string]$Loader = "fabric",
     [string]$ProjectSlug = "vanillacraftingplus",
