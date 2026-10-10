@@ -1,7 +1,7 @@
 param(
     [string]$Token = $env:MODRINTH_TOKEN,
-    [string]$Version = "0.1.0",
-    [ValidateSet("fabric", "forge", "neoforge")]
+    [string]$Version = "1.0.2",
+    [ValidateSet("fabric", "forge", "neoforge", "datapack")]
     [string]$Loader = "fabric",
     [string]$ProjectSlug = "vanillacraftingplus",
     [string]$ArtifactsDir = "",
@@ -23,10 +23,48 @@ if (-not $Changelog) { $Changelog = "Release $Version" }
 
 # game_versions each node's jar claims. Keep these in sync with mod.mc_compat in
 # stonecutter.properties.toml and with the node list in settings.gradle.kts.
+# Loader gaps: no Forge/NeoForge build for 1.20.5, no NeoForge for 1.20.5/21.2.
 $targets = switch ($Loader) {
-    "forge" { @(@{ Mc = "26.1"; Games = @("26.1", "26.1.1", "26.1.2", "26.2", "26.3") }) }
-    "neoforge" { @(@{ Mc = "26.1"; Games = @("26.1", "26.1.1", "26.1.2", "26.2", "26.3") }) }
-    default { @(@{ Mc = "26.2"; Games = @("26.2", "26.3") }) }
+    "fabric" {
+        @(
+            @{ Mc = "1.16.5"; Games = @("1.16.5", "1.17", "1.17.1", "1.18", "1.18.1") }
+            @{ Mc = "1.18.2"; Games = @("1.18.2", "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4", "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6", "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11", "26.1", "26.1.1", "26.1.2") }
+            @{ Mc = "26.2"; Games = @("26.2", "26.3") }
+        )
+    }
+    "forge" {
+        @(
+            @{ Mc = "1.16.5"; Games = @("1.16.5", "1.17", "1.17.1", "1.18", "1.18.1", "1.18.2", "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4", "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4") }
+            @{ Mc = "1.20.6"; Games = @("1.20.6", "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11") }
+            @{ Mc = "26.1"; Games = @("26.1", "26.1.1", "26.1.2", "26.2", "26.3") }
+        )
+    }
+    "neoforge" {
+        @(
+            @{ Mc = "1.20.4"; Games = @("1.20.4") }
+            @{ Mc = "1.20.6"; Games = @("1.20.6", "1.21", "1.21.1", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11") }
+            @{ Mc = "26.1"; Games = @("26.1", "26.1.1", "26.1.2", "26.2", "26.3") }
+        )
+    }
+    "datapack" {
+        @(
+            @{ Mc = "1.16.5"; Games = @("1.16.5") }
+            @{ Mc = "1.18.2"; Games = @("1.18.2") }
+            @{ Mc = "1.20.4"; Games = @("1.20.3", "1.20.4") }
+            @{ Mc = "1.20.6"; Games = @("1.20.5", "1.20.6") }
+            @{ Mc = "1.21"; Games = @("1.21", "1.21.1") }
+            @{ Mc = "1.21.2"; Games = @("1.21.2", "1.21.3") }
+            @{ Mc = "1.21.4"; Games = @("1.21.4") }
+            @{ Mc = "1.21.5"; Games = @("1.21.5") }
+            @{ Mc = "1.21.6"; Games = @("1.21.6") }
+            @{ Mc = "1.21.9"; Games = @("1.21.9", "1.21.10") }
+            @{ Mc = "1.21.11"; Games = @("1.21.11") }
+            @{ Mc = "26.1"; Games = @("26.1", "26.1.1", "26.1.2") }
+            @{ Mc = "26.2"; Games = @("26.2") }
+            @{ Mc = "26.3"; Games = @("26.3") }
+        )
+    }
+    default { throw "Unknown loader '$Loader'" }
 }
 
 $headers = @{ "User-Agent" = "$ProjectSlug-publish/$Version" }
@@ -61,11 +99,12 @@ $allVersions = @(Get-Json "/project/$ProjectSlug/version")
 
 foreach ($t in $targets) {
     $mc = $t.Mc
-    $jarName = "$ProjectSlug-$Loader-$Version+$mc.jar"
+    $isDatapack = $Loader -eq "datapack"
+    $jarName = if ($isDatapack) { "$ProjectSlug-$Version-$mc.zip" } else { "$ProjectSlug-$Loader-$Version+$mc.jar" }
     $jarPath = Join-Path $ArtifactsDir $jarName
     $srcName = "$ProjectSlug-$Loader-$Version+$mc-sources.jar"
     $srcPath = Join-Path $ArtifactsDir $srcName
-    $versionNumber = "$Version+$mc"
+    $versionNumber = if ($isDatapack) { "$Version-$mc" } else { "$Version+$mc" }
 
     if (-not (Test-Path $jarPath)) { throw "Missing artifact: $jarPath" }
     $jarBytes = [System.IO.File]::ReadAllBytes($jarPath)
@@ -78,7 +117,7 @@ foreach ($t in $targets) {
         $deps = @(@{ project_id = $fabricApiProjectId; dependency_type = "required" })
     }
 
-    $name = "$ProjectSlug $Version for $mc ($Loader)"
+    $name = if ($isDatapack) { "$ProjectSlug $Version datapack for $mc" } else { "$ProjectSlug $Version for $mc ($Loader)" }
 
     if (@($allVersions | Where-Object { $_.version_number -eq $versionNumber -and $_.loaders -contains $Loader }).Count -gt 0) {
         "SKIP $versionNumber ($Loader already exists)"
@@ -102,7 +141,7 @@ foreach ($t in $targets) {
         environment      = "server_only_client_optional"
         file_types       = @{}
     }
-    if ($IncludeSources -and (Test-Path $srcPath)) {
+    if ($IncludeSources -and -not $isDatapack -and (Test-Path $srcPath)) {
         $data.file_parts = @("file1", "sources1")
         $data.file_types = @{ sources1 = "sources-jar" }
     }
@@ -122,9 +161,10 @@ foreach ($t in $targets) {
         $form = [System.Net.Http.MultipartFormDataContent]::new()
         $form.Add([System.Net.Http.StringContent]::new($dataJson, [System.Text.Encoding]::UTF8, "application/json"), "data")
         $jarPart = [System.Net.Http.ByteArrayContent]::new($jarBytes)
-        $jarPart.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse("application/java-archive")
+        $fileType = if ($isDatapack) { "application/zip" } else { "application/java-archive" }
+        $jarPart.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse($fileType)
         $form.Add($jarPart, "file1", $jarName)
-        if ($IncludeSources -and (Test-Path $srcPath)) {
+        if ($IncludeSources -and -not $isDatapack -and (Test-Path $srcPath)) {
             $srcBytes = [System.IO.File]::ReadAllBytes($srcPath)
             $srcPart = [System.Net.Http.ByteArrayContent]::new($srcBytes)
             $srcPart.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse("application/java-archive")

@@ -1,0 +1,13 @@
+{
+  "name": "vanillacraftingplus-imagegen",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "bun run main.ts"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.10",
+    "gifenc": "^1.0.3",
+    "gifuct-js": "^2.1.2"
+  }
+}

@@ -35,3 +35,6 @@ bin/
 # Misc
 local.properties
 *.log
+
+# JS tooling (scripts/imagegen)
+node_modules/
