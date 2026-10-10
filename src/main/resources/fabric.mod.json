@@ -9,8 +9,8 @@
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/vanillacraftingplus",
-    "sources": "https://github.com/kryparnold/vanilla-crafting-plus",
-    "issues": "https://github.com/kryparnold/vanilla-crafting-plus/issues"
+    "sources": "https://github.com/emirhanpisgin/vanillacraftingplus",
+    "issues": "https://github.com/emirhanpisgin/vanillacraftingplus/issues"
   },
   "license": "MIT",
   "icon": "assets/vanillacraftingplus/icon.png",
