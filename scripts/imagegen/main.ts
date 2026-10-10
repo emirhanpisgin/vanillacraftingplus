@@ -195,8 +195,12 @@ async function generateRecipeImage(recipe: Recipe): Promise<Canvas> {
         const metrics = resultContext.measureText(text);
         const textWidth = metrics.width;
         const textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-        const textX = 48 - textWidth - 8;
-        const textY = 48 - (textHeight + 1) * 2 - 8;
+        // PIL anchors draw.text at the ascender line and reports the glyph mask's
+        // right edge as width; Skia's "top" baseline sits higher and its advance
+        // width is wider. These offsets reproduce the original Python placement
+        // (verified pixel-for-pixel against the old outputs).
+        const textX = 48 - textWidth - 8 + 2;
+        const textY = 48 - (textHeight + 1) * 2 - 8 + 11;
         resultContext.fillStyle = "#3e3e3e";
         resultContext.fillText(text, textX + 2, textY + 2);
         resultContext.fillStyle = "white";
